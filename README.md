@@ -19,6 +19,27 @@ Spring Boot REST backend for a travel booking checkout workflow. This project ex
 - H2 for test-time context loading
 - Maven Wrapper
 
+## Docker
+
+You can run the backend and MySQL together with Docker Compose:
+
+```powershell
+docker compose up --build
+```
+
+This starts:
+
+- a MySQL container on `localhost:3306`
+- the Spring Boot API on `localhost:8080`
+
+The Docker setup uses the `docker` Spring profile, which enables Hibernate schema creation for an empty MySQL database and seeds a small demo catalog plus sample customers on first startup.
+
+To stop the stack:
+
+```powershell
+docker compose down
+```
+
 ## Running Locally
 
 ### Prerequisites
@@ -44,6 +65,18 @@ Default local values are defined in `src/main/resources/application.properties`.
 ```
 
 The API base path is `/api`.
+
+If you want to reuse the Dockerized MySQL instance while running the app from your IDE or terminal, start only the database container first:
+
+```powershell
+docker compose up -d db
+```
+
+Then run the app with the Docker profile:
+
+```powershell
+.\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=docker"
+```
 
 ## Testing
 
