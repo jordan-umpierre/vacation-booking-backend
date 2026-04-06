@@ -36,6 +36,8 @@ This starts:
 
 The Docker setup uses the `docker` Spring profile, which enables Hibernate schema creation for an empty MySQL database and seeds a small demo catalog plus sample customers on first startup.
 
+This repository does not serve a browser frontend. The main backend entry point to verify after startup is `http://localhost:8080/api`.
+
 To stop the stack:
 
 ```powershell
@@ -70,7 +72,9 @@ The default local profile uses `spring.jpa.hibernate.ddl-auto=none`, so it expec
 .\mvnw.cmd spring-boot:run
 ```
 
-The API base path is `/api`.
+The API base path is `/api`, so the main URL to test is `http://localhost:8080/api`.
+
+This repository does not include the frontend application. `http://localhost:4200` will only show anything if you separately run the original Angular client. It is also normal for `http://localhost:8080/` to return `404`; this project exposes API endpoints under `/api`, not a rendered homepage.
 
 If you want to reuse the Dockerized MySQL instance while running the app from your IDE or terminal, start only the database container first:
 
