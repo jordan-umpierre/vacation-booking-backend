@@ -21,6 +21,8 @@ Spring Boot REST backend for a travel booking checkout workflow. This project ex
 
 ## Docker
 
+Recommended for the quickest first run.
+
 You can run the backend and MySQL together with Docker Compose:
 
 ```powershell
@@ -48,6 +50,8 @@ docker compose down
 - A local MySQL instance
 - A database named `full-stack-ecommerce`
 
+For most users, Docker is the easiest way to start the project. The direct Maven run below is best if you already have MySQL available locally.
+
 ### Configuration
 
 The app reads database settings from environment variables when present and falls back to local defaults:
@@ -57,6 +61,8 @@ The app reads database settings from environment variables when present and fall
 - `APP_DB_PASSWORD`
 
 Default local values are defined in `src/main/resources/application.properties`.
+
+The default local profile uses `spring.jpa.hibernate.ddl-auto=none`, so it expects an existing schema in MySQL. If you want the application to initialize against an empty MySQL database, use the Docker profile instead.
 
 ### Start the Application
 
@@ -97,7 +103,8 @@ Tests use an in-memory H2 database so the Spring context can load without requir
 ## Notes
 
 - Repository CORS is configured for a local Angular frontend at `http://localhost:4200`.
-- `BootstrapData` seeds a small set of customers on startup when the backing database already contains division records.
+- This repository contains the backend API only; the original frontend is expected to run separately on `http://localhost:4200`.
+- `BootstrapData` seeds demo geography, travel catalog data, and sample customers for local development.
 
 ## Why This Repo Exists
 
