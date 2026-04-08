@@ -8,10 +8,10 @@
         <version>4.0.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.d288</groupId>
+    <groupId>com.jordanportfolio</groupId>
     <artifactId>travel-booking-backend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>travel-booking-backend</name>
+    <name>Travel Booking Backend</name>
     <description>Spring Boot REST backend for a travel booking checkout workflow.</description>
     <properties>
         <java.version>21</java.version>
