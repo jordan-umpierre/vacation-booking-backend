@@ -26,10 +26,9 @@ public class CheckoutServiceImpl implements CheckoutService {
     @Override
     @Transactional
     public PurchaseResponse placeOrder(Purchase purchase) {
-
         Customer incomingCustomer = purchase.getCustomer();
         Cart cart = purchase.getCart();
-        // Angular sends id = 0 for new carts â†’ normalize for JPA
+        // Normalize zero IDs from the frontend so JPA treats new records correctly.
         if (cart.getId() != null && cart.getId() == 0) {
             cart.setId(null);
         }
@@ -39,7 +38,6 @@ public class CheckoutServiceImpl implements CheckoutService {
         Customer dbCustomer = customerRepository.findById(customerId)
                 .orElseThrow(() -> new RuntimeException("Customer not found: " + customerId));
 
-        // DO NOT null cart id - Angular is sending an existing cart
         cart.setCustomer(dbCustomer);
 
         String orderTrackingNumber = UUID.randomUUID().toString();
