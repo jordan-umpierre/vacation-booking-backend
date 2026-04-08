@@ -36,7 +36,7 @@ docker compose up --build
 
 This starts:
 
-- MySQL on `localhost:3306`
+- MySQL on `localhost:3307`
 - Spring Boot API on `localhost:8080`
 
 The Docker setup uses the `docker` Spring profile, enables Hibernate schema updates for the MySQL database, and seeds a small demo catalog on first startup.
@@ -85,8 +85,18 @@ To reuse only the Dockerized MySQL container while running the app from your IDE
 
 ```bash
 docker compose up -d db
-./mvnw spring-boot:run "-Dspring-boot.run.profiles=docker"
+APP_DB_URL=jdbc:mysql://localhost:3307/full-stack-ecommerce?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC ./mvnw spring-boot:run "-Dspring-boot.run.profiles=docker"
 ```
+
+On Windows PowerShell:
+
+```powershell
+docker compose up -d db
+$env:APP_DB_URL="jdbc:mysql://localhost:3307/full-stack-ecommerce?useSSL=false&useUnicode=yes&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+.\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=docker"
+```
+
+The database is published on `3307` instead of `3306` to reduce conflicts with local MySQL installations.
 
 This repository is backend-only. It is normal for `http://localhost:8080/` to return `404`; the API is exposed under `/api`.
 
@@ -112,6 +122,38 @@ Manual smoke test checklist:
 - Confirm catalog endpoints such as `/api/vacations` and `/api/excursions` return data.
 - Submit a checkout request to `/api/checkout/purchase` and confirm the response includes an order tracking number.
 
+Example checkout request:
+
+```bash
+curl -X POST http://localhost:8080/api/checkout/purchase \
+  -H "Content-Type: application/json" \
+  -d '{
+    "customer": {
+      "id": 1,
+      "firstName": "Jane",
+      "lastName": "Smith",
+      "address": "456 Oak Ave",
+      "postal_code": "66210",
+      "phone": "(913)111-2222"
+    },
+    "cart": {
+      "id": 0,
+      "package_price": 2048.00,
+      "party_size": 2,
+      "status": "pending"
+    },
+    "cartItems": [
+      {
+        "id": 0,
+        "vacation": { "id": 1 },
+        "excursions": [
+          { "id": 1 }
+        ]
+      }
+    ]
+  }'
+```
+
 ## Key Endpoints
 
 - `GET /api/vacations`
@@ -122,6 +164,3 @@ Manual smoke test checklist:
 
 Repository CORS is configured for a local Angular frontend at `http://localhost:4200`, but this repo intentionally contains the backend API only.
 
-## Resume Bullet
-
-Built a Spring Boot travel booking backend with Spring Data REST, JPA entity relationships, MySQL persistence, Docker Compose local infrastructure, validation, seed data bootstrapping, and a transactional checkout service that returns generated order tracking numbers.
